@@ -250,6 +250,19 @@ h3 {
   gap: 12px;
 }
 
+.data-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.storage-note {
+  color: #8c98a8;
+  font-size: 0.88rem;
+  margin-top: 4px;
+}
+
 input[type='text'],
 input[type='number'] {
   width: 100%;
@@ -284,11 +297,24 @@ input[type='number']:focus {
 }
 
 .primary-button {
+  min-height: 48px;
   padding: 14px 18px;
   background: linear-gradient(135deg, #ff7b50, var(--primary));
   color: #fff;
   box-shadow: var(--orange-shadow);
   font-weight: 900;
+}
+
+.decision-button {
+  min-height: 56px;
+  padding: 16px 26px;
+  border-radius: 999px;
+  font-size: 1.06rem;
+  box-shadow: 0 18px 44px rgba(255, 106, 0, 0.34);
+}
+
+.add-button {
+  min-width: 86px;
 }
 
 .primary-button:hover {
@@ -374,6 +400,16 @@ input[type='number']:focus {
   gap: 18px;
 }
 
+.result-header {
+  align-items: end;
+}
+
+.section-subtitle {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 0.94rem;
+}
+
 .result-card {
   position: relative;
   overflow: hidden;
@@ -426,8 +462,10 @@ input[type='number']:focus {
   width: 28px;
   height: 28px;
   border-radius: 999px;
-  content: "";
   background: rgba(255, 255, 255, 0.34);
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 950;
 }
 
 .primary-result .result-label::before {
@@ -437,6 +475,47 @@ input[type='number']:focus {
 .secondary-result .result-label::before {
   background: rgba(0, 201, 167, 0.18);
   box-shadow: inset 0 0 0 8px rgba(0, 201, 167, 0.12);
+}
+
+.info-button {
+  position: relative;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(74, 144, 217, 0.14);
+  color: var(--blue);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.info-tip {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  z-index: 4;
+  width: min(260px, 70vw);
+  padding: 10px 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  background: #fff;
+  color: #526071;
+  box-shadow: var(--shadow-soft);
+  font-size: 0.86rem;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.info-button:hover + .info-tip,
+.info-button:focus + .info-tip {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .result-value {
@@ -451,6 +530,18 @@ input[type='number']:focus {
 
 .result-value.empty {
   color: #8c98a8;
+}
+
+.result-card.is-picked {
+  animation: result-pop 0.62s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.primary-result.is-picked::before {
+  position: absolute;
+  inset: -40%;
+  content: "";
+  background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.55) 48%, transparent 62%);
+  animation: result-shine 0.72s ease-out;
 }
 
 .primary-result:has(.result-value.empty) {
@@ -559,7 +650,9 @@ input[type='number']:focus {
 
 .history-record {
   display: grid;
-  gap: 4px;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
   width: 100%;
   border-radius: 16px;
   padding: 11px 12px;
@@ -569,16 +662,53 @@ input[type='number']:focus {
 
 .history-record strong {
   color: #253044;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .history-record span {
   color: #888;
   font-size: 0.86rem;
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.history-remove-button {
+  min-width: 44px;
+  min-height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff1f0;
+  color: #d14343;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.history-remove-button:hover {
+  background: #ffe2df;
 }
 
 .history-empty {
   background: #f4f7fb;
   color: #8a96a8;
+}
+
+.rule-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.rule-chips span {
+  padding: 8px 11px;
+  border: 1px solid #e8eef6;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #888;
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
 .sr-only {
@@ -633,6 +763,30 @@ input[type='number']:focus {
   }
 }
 
+@keyframes result-pop {
+  0% {
+    transform: scale(0.985);
+  }
+
+  45% {
+    transform: scale(1.025);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes result-shine {
+  from {
+    transform: translateX(-50%) rotate(8deg);
+  }
+
+  to {
+    transform: translateX(50%) rotate(8deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -656,6 +810,14 @@ input[type='number']:focus {
   }
 
   .hero-orb {
+    justify-self: start;
+  }
+
+  .history-record {
+    grid-template-columns: 1fr;
+  }
+
+  .history-record span {
     justify-self: start;
   }
 

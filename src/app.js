@@ -10,9 +10,14 @@ const optionInput = document.querySelector('#option-input');
 const optionList = document.querySelector('#option-list');
 const formMessage = document.querySelector('#form-message');
 const clearButton = document.querySelector('#clear-button');
+const exportButton = document.querySelector('#export-button');
+const importButton = document.querySelector('#import-button');
+const importFileInput = document.querySelector('#import-file-input');
 const pickButton = document.querySelector('#pick-button');
 const primaryResult = document.querySelector('#primary-result');
 const secondaryResult = document.querySelector('#secondary-result');
+const primaryCard = document.querySelector('#primary-card');
+const secondaryCard = document.querySelector('#secondary-card');
 const recentList = document.querySelector('#recent-list');
 const historyList = document.querySelector('#history-list');
 const excludeCountInput = document.querySelector('#exclude-count-input');
@@ -52,6 +57,17 @@ const renderResults = (result = null) => {
 
   secondaryResult.textContent = secondary ?? '这次没有备选';
   secondaryResult.classList.toggle('empty', !secondary);
+
+  pickButton.textContent = primary ? '换一个' : '帮我决定';
+};
+
+const animateResult = () => {
+  [primaryCard, secondaryCard].forEach((card) => {
+    card.classList.remove('is-picked');
+    window.requestAnimationFrame(() => {
+      card.classList.add('is-picked');
+    });
+  });
 };
 
 const createChip = (text, empty = false) => {
@@ -75,7 +91,22 @@ const createHistoryRecord = (entry) => {
   const time = document.createElement('span');
   time.textContent = typeof entry === 'string' ? '旧记录' : formatDateTime(entry.ts);
 
-  item.append(title, time);
+  const removeButton = document.createElement('button');
+  removeButton.type = 'button';
+  removeButton.className = 'history-remove-button';
+  removeButton.textContent = '删除';
+  removeButton.addEventListener('click', () => {
+    persistState({
+      ...state,
+      history: state.history.filter((item) => item !== entry),
+      recentPrimaries: removeOption(state.recentPrimaries, primary),
+      lastPrimary: state.lastPrimary === primary ? null : state.lastPrimary,
+    });
+    renderHistory();
+    setMessage(`已删除历史：${primary}`);
+  });
+
+  item.append(title, time, removeButton);
   return item;
 };
 
@@ -159,6 +190,49 @@ const renderHistory = () => {
   renderRecentList();
   renderHistoryRecords();
 };
+
+exportButton.addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify({ options: state.options }, null, 2)], {
+    type: 'application/json',
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'eatwhat-options.json';
+  link.click();
+  URL.revokeObjectURL(url);
+  setMessage('已导出候选列表。');
+});
+
+importButton.addEventListener('click', () => {
+  importFileInput.click();
+});
+
+importFileInput.addEventListener('change', async () => {
+  const file = importFileInput.files?.[0];
+
+  if (!file) {
+    return;
+  }
+
+  try {
+    const content = await file.text();
+    const parsed = JSON.parse(content);
+    const importedOptions = Array.isArray(parsed) ? parsed : parsed.options;
+    const nextOptions = importedOptions.reduce((options, option) => addOption(options, option).options, state.options);
+
+    persistState({
+      ...state,
+      options: nextOptions,
+    });
+    renderOptions();
+    setMessage('已导入候选列表。');
+  } catch {
+    setMessage('导入失败，请选择正确的 JSON 文件。', 'error');
+  } finally {
+    importFileInput.value = '';
+  }
+});
 
 optionForm.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -258,6 +332,7 @@ pickButton.addEventListener('click', () => {
   persistState(nextState);
   renderHistory();
   renderResults(result);
+  animateResult();
   setMessage('已帮你抽出这顿午饭。');
 });
 

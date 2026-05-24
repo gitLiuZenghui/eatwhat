@@ -32,27 +32,41 @@
 
           <form id="option-form" class="option-form">
             <label class="sr-only" for="option-input">添加吃饭选项</label>
-            <input id="option-input" name="option" type="text" maxlength="30" placeholder="例如：麻辣烫、黄焖鸡、沙拉" autocomplete="off" />
-            <button class="primary-button" type="submit">添加</button>
+            <input id="option-input" name="option" type="text" maxlength="30" placeholder="试试：麻辣烫、楼下黄焖鸡、食堂沙拉" autocomplete="off" />
+            <button class="primary-button add-button" type="submit">添加</button>
           </form>
 
+          <div class="data-actions" aria-label="候选列表数据管理">
+            <button id="export-button" class="ghost-button compact-button" type="button">导出候选</button>
+            <button id="import-button" class="ghost-button compact-button" type="button">导入候选</button>
+            <input id="import-file-input" type="file" accept="application/json,.json" hidden />
+          </div>
+
           <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+          <p class="storage-note">数据仅保存在本设备当前浏览器；清除缓存或换设备可能会丢失，可用导出/导入备份。</p>
           <ul id="option-list" class="option-list"></ul>
         </section>
 
         <section class="card panel result-panel">
-          <div class="panel-header">
-            <h2>随机结果</h2>
-            <button id="pick-button" class="primary-button" type="button">帮我决定</button>
+          <div class="panel-header result-header">
+            <div>
+              <h2>随机结果</h2>
+              <p class="section-subtitle">不满意就换一个，直到它看起来真的想吃。</p>
+            </div>
+            <button id="pick-button" class="primary-button decision-button" type="button">帮我决定</button>
           </div>
 
           <div class="result-grid">
-            <article class="result-card primary-result">
-              <p class="result-label">主选</p>
+            <article id="primary-card" class="result-card primary-result">
+              <p class="result-label"><span class="result-icon" aria-hidden="true">主</span>主选</p>
               <p id="primary-result" class="result-value empty">还没抽</p>
             </article>
-            <article class="result-card secondary-result">
-              <p class="result-label">备选</p>
+            <article id="secondary-card" class="result-card secondary-result">
+              <p class="result-label">
+                <span class="result-icon" aria-hidden="true">备</span>备选
+                <button class="info-button" type="button" aria-label="备选说明">i</button>
+                <span class="info-tip">如果主选不想吃，或者已售罄，就启用备选。</span>
+              </p>
               <p id="secondary-result" class="result-value empty">还没抽</p>
             </article>
           </div>
@@ -77,7 +91,11 @@
             </div>
           </section>
 
-          <p class="result-tip">规则：优先排除最近 N 次吃过和上一次主选，备选不会和主选重复。</p>
+          <div class="rule-chips" aria-label="抽签规则">
+            <span>排除最近 N 次主选</span>
+            <span>备选不重复主选</span>
+            <span>历史按时间倒序</span>
+          </div>
         </section>
       </section>
     </main>
