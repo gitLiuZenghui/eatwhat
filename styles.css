@@ -53,6 +53,21 @@ body::before {
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.32), transparent 88%);
 }
 
+body::after {
+  position: fixed;
+  inset: 0;
+  z-index: 18;
+  pointer-events: none;
+  content: "";
+  background: rgba(14, 16, 28, 0.68);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+body.is-drawing::after {
+  opacity: 1;
+}
+
 button,
 input {
   font: inherit;
@@ -776,28 +791,29 @@ input[type='number']:focus {
 .draw-particle {
   position: fixed;
   z-index: 20;
-  border: 1px solid rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.92);
   border-radius: 999px;
   pointer-events: none;
-  opacity: 0.96;
-  box-shadow: 0 0 18px rgba(255, 106, 0, 0.46), 0 0 34px rgba(255, 200, 87, 0.32);
+  opacity: 1;
+  box-shadow: 0 0 24px rgba(255, 106, 0, 0.74), 0 0 46px rgba(255, 200, 87, 0.54), 0 0 70px rgba(255, 255, 255, 0.22);
   transform: translate3d(-50%, -50%, 0);
-  animation: draw-particle 0.82s ease-out forwards;
+  animation: draw-particle 0.9s ease-out forwards;
 }
 
 @keyframes draw-particle {
   0% {
-    opacity: 0.96;
-    transform: translate3d(-50%, -50%, 0) scale(0.92);
+    opacity: 1;
+    transform: translate3d(-50%, -50%, 0) scale(0.78);
   }
 
-  38% {
-    opacity: 0.9;
+  34% {
+    opacity: 1;
+    transform: translate3d(calc(-50% + var(--x) * 0.58), calc(-50% + var(--y) * 0.58), 0) scale(1.08);
   }
 
   100% {
     opacity: 0;
-    transform: translate3d(calc(-50% + var(--x)), calc(-50% + var(--y)), 0) scale(0.25);
+    transform: translate3d(calc(-50% + var(--x)), calc(-50% + var(--y)), 0) scale(0.2);
   }
 }
 

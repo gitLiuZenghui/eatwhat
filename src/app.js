@@ -4,7 +4,7 @@ import { loadState, saveState } from './storage.js';
 let state = loadState();
 
 const historyLimit = 6;
-const drawDuration = 800;
+const drawDuration = 900;
 let isDrawing = false;
 
 const optionForm = document.querySelector('#option-form');
@@ -80,8 +80,8 @@ const playDrawBurst = () => new Promise((resolve) => {
   const anchor = primaryCard.getBoundingClientRect();
   const originX = anchor.left + anchor.width / 2;
   const originY = anchor.top + anchor.height * 0.42;
-  const colors = ['#FF6A00', '#FF8C42', '#FFC857', '#FFFFFF', '#FFB347'];
-  const particleCount = Math.min(60, Math.max(34, Math.floor(window.innerWidth / 7)));
+  const colors = ['#FF5E00', '#FF6A00', '#FF8C42', '#FFC857', '#FFFFFF', '#FFB347'];
+  const particleCount = Math.min(86, Math.max(54, Math.floor(window.innerWidth / 5)));
   const fragment = document.createDocumentFragment();
 
   Array.from({ length: particleCount }).forEach((_, index) => {
@@ -89,8 +89,8 @@ const playDrawBurst = () => new Promise((resolve) => {
     const anglePool = index % 7 === 0
       ? Math.PI * (0.22 + Math.random() * 0.56)
       : Math.PI * (1.02 + Math.random() * 0.96);
-    const distance = 80 + Math.random() * 70;
-    const size = 4 + Math.random() * 5;
+    const distance = 130 + Math.random() * 130;
+    const size = 7 + Math.random() * 8;
     const driftY = index % 7 === 0 ? Math.abs(Math.sin(anglePool)) * distance : Math.sin(anglePool) * distance;
 
     particle.className = 'draw-particle';
@@ -105,9 +105,11 @@ const playDrawBurst = () => new Promise((resolve) => {
     fragment.append(particle);
   });
 
+  document.body.classList.add('is-drawing');
   document.body.append(fragment);
   window.setTimeout(() => {
     document.querySelectorAll('.draw-particle').forEach((particle) => particle.remove());
+    document.body.classList.remove('is-drawing');
     resolve();
   }, drawDuration);
 });
@@ -365,7 +367,9 @@ pickButton.addEventListener('click', async () => {
   pickButton.textContent = '抽签中...';
   setMessage('正在帮你认真抽签。');
 
-  await playDrawBurst();
+  await playDrawBurst().catch(() => {
+    document.body.classList.remove('is-drawing');
+  });
 
   const nextState = {
     ...state,
