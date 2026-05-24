@@ -11,10 +11,10 @@ if (canvas && context && !reduceMotion) {
   let animationFrame = 0;
 
   const colors = [
-    'rgba(255, 209, 102, 0.8)',
-    'rgba(255, 138, 61, 0.74)',
-    'rgba(34, 211, 238, 0.62)',
-    'rgba(167, 139, 250, 0.62)',
+    'rgba(255, 106, 0, 0.32)',
+    'rgba(255, 123, 80, 0.28)',
+    'rgba(0, 201, 167, 0.26)',
+    'rgba(74, 144, 217, 0.24)',
   ];
 
   const createParticle = () => ({
@@ -55,7 +55,7 @@ if (canvas && context && !reduceMotion) {
     context.beginPath();
     context.moveTo(first.x / (window.devicePixelRatio || 1), first.y / (window.devicePixelRatio || 1));
     context.lineTo(second.x / (window.devicePixelRatio || 1), second.y / (window.devicePixelRatio || 1));
-    context.strokeStyle = `rgba(255, 255, 255, ${0.12 * (1 - distance / 150)})`;
+    context.strokeStyle = `rgba(74, 144, 217, ${0.08 * (1 - distance / 150)})`;
     context.lineWidth = 1;
     context.stroke();
   };
