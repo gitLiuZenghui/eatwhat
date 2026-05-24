@@ -322,6 +322,12 @@ input[type='number']:focus {
   box-shadow: 0 20px 42px rgba(255, 106, 0, 0.32);
 }
 
+.primary-button:disabled {
+  cursor: wait;
+  opacity: 0.82;
+  transform: none;
+}
+
 .ghost-button {
   padding: 10px 14px;
   border: 1px solid #ffe0cf;
@@ -534,6 +540,10 @@ input[type='number']:focus {
 
 .result-card.is-picked {
   animation: result-pop 0.62s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.result-card.is-picked .result-value:not(.empty) {
+  animation: result-text-in 0.36s cubic-bezier(0.34, 1.3, 0.55, 1) both;
 }
 
 .primary-result.is-picked::before {
@@ -760,6 +770,45 @@ input[type='number']:focus {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.draw-particle {
+  position: fixed;
+  z-index: 20;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0.8;
+  box-shadow: 0 0 14px rgba(255, 140, 66, 0.28);
+  transform: translate3d(-50%, -50%, 0);
+  animation: draw-particle 0.8s ease-out forwards;
+}
+
+@keyframes draw-particle {
+  0% {
+    opacity: 0.8;
+    transform: translate3d(-50%, -50%, 0) scale(0.88);
+  }
+
+  38% {
+    opacity: 0.78;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(-50% + var(--x)), calc(-50% + var(--y)), 0) scale(0.25);
+  }
+}
+
+@keyframes result-text-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }
 

@@ -4,6 +4,8 @@ import { loadState, saveState } from './storage.js';
 let state = loadState();
 
 const historyLimit = 6;
+const drawDuration = 800;
+let isDrawing = false;
 
 const optionForm = document.querySelector('#option-form');
 const optionInput = document.querySelector('#option-input');
@@ -68,7 +70,47 @@ const animateResult = () => {
       card.classList.add('is-picked');
     });
   });
+
+  if ('vibrate' in navigator) {
+    navigator.vibrate(10);
+  }
 };
+
+const playDrawBurst = () => new Promise((resolve) => {
+  const anchor = primaryCard.getBoundingClientRect();
+  const originX = anchor.left + anchor.width / 2;
+  const originY = anchor.top + anchor.height * 0.42;
+  const colors = ['#FF8C42', '#FFC857', '#FFFFFF', '#FFB347'];
+  const particleCount = Math.min(60, Math.max(34, Math.floor(window.innerWidth / 7)));
+  const fragment = document.createDocumentFragment();
+
+  Array.from({ length: particleCount }).forEach((_, index) => {
+    const particle = document.createElement('span');
+    const anglePool = index % 7 === 0
+      ? Math.PI * (0.22 + Math.random() * 0.56)
+      : Math.PI * (1.02 + Math.random() * 0.96);
+    const distance = 80 + Math.random() * 70;
+    const size = 2 + Math.random() * 4;
+    const driftY = index % 7 === 0 ? Math.abs(Math.sin(anglePool)) * distance : Math.sin(anglePool) * distance;
+
+    particle.className = 'draw-particle';
+    particle.style.left = `${originX}px`;
+    particle.style.top = `${originY}px`;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+    particle.style.setProperty('--x', `${Math.cos(anglePool) * distance}px`);
+    particle.style.setProperty('--y', `${driftY}px`);
+    particle.style.animationDelay = `${Math.random() * 90}ms`;
+    fragment.append(particle);
+  });
+
+  document.body.append(fragment);
+  window.setTimeout(() => {
+    document.querySelectorAll('.draw-particle').forEach((particle) => particle.remove());
+    resolve();
+  }, drawDuration);
+});
 
 const createChip = (text, empty = false) => {
   const item = document.createElement('li');
@@ -298,7 +340,11 @@ excludeCountInput.addEventListener('change', () => {
   setMessage(`已设置为排除最近 ${nextValue} 次主选。`);
 });
 
-pickButton.addEventListener('click', () => {
+pickButton.addEventListener('click', async () => {
+  if (isDrawing) {
+    return;
+  }
+
   const result = pickLunchPair(
     state.options,
     {
@@ -313,6 +359,13 @@ pickButton.addEventListener('click', () => {
     optionInput.focus();
     return;
   }
+
+  isDrawing = true;
+  pickButton.disabled = true;
+  pickButton.textContent = '抽签中...';
+  setMessage('正在帮你认真抽签。');
+
+  await playDrawBurst();
 
   const nextState = {
     ...state,
@@ -334,6 +387,8 @@ pickButton.addEventListener('click', () => {
   renderResults(result);
   animateResult();
   setMessage('已帮你抽出这顿午饭。');
+  pickButton.disabled = false;
+  isDrawing = false;
 });
 
 renderOptions();
