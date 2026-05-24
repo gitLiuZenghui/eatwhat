@@ -1,0 +1,11 @@
+{
+  "name": "eatwhat",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test --experimental-test-coverage",
+    "start": "node scripts/serve.js",
+    "serve": "node scripts/serve.js"
+  }
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>今天中午吃什么</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="card hero">
+        <p class="eyebrow">午饭选择器</p>
+        <h1>今天中午吃什么？</h1>
+        <p class="subtitle">手动维护你的候选列表，一键随机抽出主选和备选。</p>
+      </section>
+
+      <section class="layout">
+        <section class="card panel">
+          <div class="panel-header">
+            <h2>吃什么候选</h2>
+            <button id="clear-button" class="ghost-button" type="button">清空全部</button>
+          </div>
+
+          <form id="option-form" class="option-form">
+            <label class="sr-only" for="option-input">添加吃饭选项</label>
+            <input id="option-input" name="option" type="text" maxlength="30" placeholder="例如：麻辣烫、黄焖鸡、沙拉" autocomplete="off" />
+            <button class="primary-button" type="submit">添加</button>
+          </form>
+
+          <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+          <ul id="option-list" class="option-list"></ul>
+        </section>
+
+        <section class="card panel result-panel">
+          <div class="panel-header">
+            <h2>随机结果</h2>
+            <button id="pick-button" class="primary-button" type="button">帮我决定</button>
+          </div>
+
+          <div class="result-grid">
+            <article class="result-card primary-result">
+              <p class="result-label">主选</p>
+              <p id="primary-result" class="result-value empty">还没抽</p>
+            </article>
+            <article class="result-card secondary-result">
+              <p class="result-label">备选</p>
+              <p id="secondary-result" class="result-value empty">还没抽</p>
+            </article>
+          </div>
+
+          <section class="history-panel">
+            <div class="history-block">
+              <h3>最近吃过</h3>
+              <label class="exclude-control" for="exclude-count-input">
+                排除最近
+                <input id="exclude-count-input" type="number" min="0" max="10" step="1" />
+                次主选
+              </label>
+              <ul id="recent-list" class="history-list"></ul>
+            </div>
+            <div class="history-block">
+              <div class="history-title-row">
+                <h3>历史记录</h3>
+                <button id="clear-history-button" class="ghost-button compact-button" type="button">清空历史</button>
+              </div>
+              <p class="history-tip">按最近到更早的顺序展示，包含主选、备选和时间。</p>
+              <ul id="history-list" class="history-list history-records"></ul>
+            </div>
+          </section>
+
+          <p class="result-tip">规则：优先排除最近 N 次吃过和上一次主选，备选不会和主选重复。</p>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
