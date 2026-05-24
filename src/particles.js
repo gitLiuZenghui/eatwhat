@@ -11,10 +11,10 @@ if (canvas && context && !reduceMotion) {
   let animationFrame = 0;
 
   const colors = [
-    'rgba(255, 106, 0, 0.32)',
-    'rgba(255, 123, 80, 0.28)',
-    'rgba(0, 201, 167, 0.26)',
-    'rgba(74, 144, 217, 0.24)',
+    'rgba(255, 106, 0, 0.46)',
+    'rgba(255, 123, 80, 0.42)',
+    'rgba(0, 201, 167, 0.34)',
+    'rgba(74, 144, 217, 0.32)',
   ];
 
   const createParticle = () => ({

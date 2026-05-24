@@ -80,7 +80,7 @@ const playDrawBurst = () => new Promise((resolve) => {
   const anchor = primaryCard.getBoundingClientRect();
   const originX = anchor.left + anchor.width / 2;
   const originY = anchor.top + anchor.height * 0.42;
-  const colors = ['#FF8C42', '#FFC857', '#FFFFFF', '#FFB347'];
+  const colors = ['#FF6A00', '#FF8C42', '#FFC857', '#FFFFFF', '#FFB347'];
   const particleCount = Math.min(60, Math.max(34, Math.floor(window.innerWidth / 7)));
   const fragment = document.createDocumentFragment();
 
@@ -90,7 +90,7 @@ const playDrawBurst = () => new Promise((resolve) => {
       ? Math.PI * (0.22 + Math.random() * 0.56)
       : Math.PI * (1.02 + Math.random() * 0.96);
     const distance = 80 + Math.random() * 70;
-    const size = 2 + Math.random() * 4;
+    const size = 4 + Math.random() * 5;
     const driftY = index % 7 === 0 ? Math.abs(Math.sin(anglePool)) * distance : Math.sin(anglePool) * distance;
 
     particle.className = 'draw-particle';

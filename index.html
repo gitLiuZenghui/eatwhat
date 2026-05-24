@@ -24,29 +24,6 @@
       </section>
 
       <section class="layout">
-        <section class="card panel">
-          <div class="panel-header">
-            <h2>吃什么候选</h2>
-            <button id="clear-button" class="ghost-button" type="button">清空全部</button>
-          </div>
-
-          <form id="option-form" class="option-form">
-            <label class="sr-only" for="option-input">添加吃饭选项</label>
-            <input id="option-input" name="option" type="text" maxlength="30" placeholder="试试：麻辣烫、楼下黄焖鸡、食堂沙拉" autocomplete="off" />
-            <button class="primary-button add-button" type="submit">添加</button>
-          </form>
-
-          <div class="data-actions" aria-label="候选列表数据管理">
-            <button id="export-button" class="ghost-button compact-button" type="button">导出候选</button>
-            <button id="import-button" class="ghost-button compact-button" type="button">导入候选</button>
-            <input id="import-file-input" type="file" accept="application/json,.json" hidden />
-          </div>
-
-          <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
-          <p class="storage-note">数据仅保存在本设备当前浏览器；清除缓存或换设备可能会丢失，可用导出/导入备份。</p>
-          <ul id="option-list" class="option-list"></ul>
-        </section>
-
         <section class="card panel result-panel">
           <div class="panel-header result-header">
             <div>
@@ -96,6 +73,29 @@
             <span>备选不重复主选</span>
             <span>历史按时间倒序</span>
           </div>
+        </section>
+
+        <section class="card panel">
+          <div class="panel-header">
+            <h2>吃什么候选</h2>
+            <button id="clear-button" class="ghost-button" type="button">清空全部</button>
+          </div>
+
+          <form id="option-form" class="option-form">
+            <label class="sr-only" for="option-input">添加吃饭选项</label>
+            <input id="option-input" name="option" type="text" maxlength="30" placeholder="试试：麻辣烫、楼下黄焖鸡、食堂沙拉" autocomplete="off" />
+            <button class="primary-button add-button" type="submit">添加</button>
+          </form>
+
+          <div class="data-actions" aria-label="候选列表数据管理">
+            <button id="export-button" class="ghost-button compact-button" type="button">导出候选</button>
+            <button id="import-button" class="ghost-button compact-button" type="button">导入候选</button>
+            <input id="import-file-input" type="file" accept="application/json,.json" hidden />
+          </div>
+
+          <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+          <p class="storage-note">数据仅保存在本设备当前浏览器；清除缓存或换设备可能会丢失，可用导出/导入备份。</p>
+          <ul id="option-list" class="option-list"></ul>
         </section>
       </section>
     </main>
